@@ -36,6 +36,7 @@ class HoroskopiusSDK {
 	private $headline_type;
 	private $date_horoskop;
 	private $speedup;
+	private $latin;
 	
 	public function __construct() {
 			 $this->response_type = 'xml';
@@ -44,6 +45,11 @@ class HoroskopiusSDK {
 			 $this->horoscope_type = 1;
 			 $this->cache = 1;
 			 $this->speedup = 1;
+			 $this->latin = 1;
+	}
+	
+	public function setAlphabet($i) {
+			$this->latin = ($i > 0 && $i <= 2) ? $i : $this->latin;
 	}
 	
 	private function generateSignature($k) {
@@ -129,7 +135,7 @@ class HoroskopiusSDK {
 		curl_setopt($ch, CURLOPT_URL,$url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER,1); 
 		curl_setopt($ch, CURLOPT_TIMEOUT, 5);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, "type=$this->response_type&horoscope=$this->horoscope&category=$this->category&horoscope_type=$this->horoscope_type&sig=" . urlencode($this->signature) . "&auth=" . urlencode($this->public_key) . ""); 
+		curl_setopt($ch, CURLOPT_POSTFIELDS, "type=$this->response_type&horoscope=$this->horoscope&category=$this->category&horoscope_type=$this->horoscope_type&sig=" . urlencode($this->signature) . "&auth=" . urlencode($this->public_key) . "&cache=" . $this->cache .""); 
 		curl_setopt($ch, CURLOPT_USERAGENT, 'Horoskopius');
 		$result = curl_exec($ch);
 		return $result;
@@ -146,12 +152,12 @@ class HoroskopiusSDK {
 		$xml = new SimpleXmlElement($response, LIBXML_NOCDATA);
 		$cnt = count($xml->{"horoscope"});
 		$content = '<div id="horoskopius">'.
-			 '<h2>' . $this->headline_type . $this->headline_category . $this->headline_horoscope . '</h2>'.
+			 '<h2>' . $this->latin2cyrillic($this->headline_type . $this->headline_category . $this->headline_horoscope) . '</h2>'.
 			 '<span class="horoskopius-date"></span><ul>';
 		for($i=0; $i<$cnt; $i++) :
-			$content.= '<li><h3>' . $xml->{"horoscope"}[$i]->{"sign"} . '</h3> ' . $xml->{"horoscope"}[$i]->{"horoscopetxt"} . '</li>';
+			$content.= '<li><span class="sign-container hor-' . strtolower(str_replace("Š", "s", $xml->{"horoscope"}[$i]->{"sign"})) . '"></span><h3>' . $this->latin2cyrillic($xml->{"horoscope"}[$i]->{"sign"}) . '</h3> ' . $this->latin2cyrillic($xml->{"horoscope"}[$i]->{"horoscopetxt"}) . '</li>';
 		endfor;
-			$content .= '<li class="horoskopius-link">Horoskop obezbedio - Astro portal <a href="http://www.horoskopius.com">Horoskopius</a></li>';
+			$content .= '<li class="horoskopius-link">' . $this->latin2cyrillic('Horoskop obezbedio - Astro portal').' <a href="http://www.horoskopius.com">Horoskopius</a></li>';
 			$content .= '</ul></div>';
 			echo $content;
 		$fp = fopen($cachefile, 'w');
@@ -171,19 +177,91 @@ class HoroskopiusSDK {
 		$response = $this->setCurlResponse();
 		$json = json_decode($response);
 		$content = '<div id="horoskopius">'.
-			 '<h2>' . $this->headline_type . $this->headline_category . $this->headline_horoscope . '</h2>'.
+			 '<h2>' . $this->latin2cyrillic($this->headline_type . $this->headline_category . $this->headline_horoscope) . '</h2>'.
 			 '<span class="horoskopius-date"></span><ul>';
 			$cnt = count($json->{"horoscope"});
 			for($i=0; $i<$cnt; $i++) :
-			$content .= '<li><h3>' . $json->{"horoscope"}[$i]->{"name_sign"} . '</h3> ' . $horoscopetxt = $json->{"horoscope"}[$i]->{"txt_hrs"} . '</li>';
+			$content .= '<li><span class="sign-container hor-' . strtolower(str_replace("Š", "s", $json->{"horoscope"}[$i]->{"name_sign"})) . '"></span><h3>' . $this->latin2cyrillic($json->{"horoscope"}[$i]->{"name_sign"}) . '</h3> ' . $this->latin2cyrillic($json->{"horoscope"}[$i]->{"txt_hrs"}) . '</li>';
 			endfor;
-			$content .= '<li class="horoskopius-link">Horoskop obezbedio - Astro portal <a href="http://www.horoskopius.com">Horoskopius</a></li>';
+			$content .= '<li class="horoskopius-link"> ' . $this->latin2cyrillic('Horoskop obezbedio - Astro portal') . ' <a href="http://www.horoskopius.com">Horoskopius</a></li>';
 			$content .= '</ul></div>';
 			echo $content;
 		$fp = fopen($cachefile, 'w');
 		fwrite($fp, $content);
 		fclose($fp);
 		endif;
+	}
+	
+	
+	private function latin2cyrillic($text) {
+		
+		$tr = array(
+					"A"=>"А",
+					"B"=>"Б",
+					"C"=>"Ц",
+					"Č"=>"Ч",
+					"D"=>"Д",
+					"Đ"=>"Ђ",
+					"E"=>"Е",
+					"F"=>"Ф",
+					"G"=>"Г",
+					"H"=>"Х",
+					"I"=>"И", 
+					"J"=>"Ј",
+					"K"=>"К",
+					"L"=>"Л",
+					"M"=>"М",
+					"N"=>"Н", 
+					"O"=>"О",
+					"P"=>"П",
+					"R"=>"Р",
+					"S"=>"С",
+					"Š"=>"Ш", 
+					"T"=>"Т",
+					"U"=>"У",
+					"V"=>"В",
+					"Z"=>"З",
+					"Ž"=>"Ж", 
+					"Ć"=>"Ћ",
+					"a"=>"а",
+					"b"=>"б",
+					"c"=>"ц",
+					"č"=>"ч", 
+					"ć"=>"ћ",
+					"d"=>"д",
+					"đ"=>"ђ",
+					"e"=>"е",
+					"f"=>"ф",
+					"g"=>"г", 
+					"h"=>"х",
+					"i"=>"и",
+					"j"=>"ј",
+					"k"=>"к",
+					"l"=>"л", 
+					"m"=>"м",
+					"n"=>"н",
+					"o"=>"о",
+					"p"=>"п",
+					"r"=>"р", 
+					"s"=>"с",
+					"š"=>"ш",
+					"t"=>"т",
+					"u"=>"у",
+					"v"=>"в", 
+					"z"=>"з",
+					"ž"=>"ж",
+					"Lj"=>"Љ",
+					"Nj"=>"Њ",
+					"Dž"=>"Џ",
+					"lj"=>"љ",
+					"nj"=>"њ",
+					"dž"=>"џ"
+					);
+	if ($this->latin == 2) : 
+	return strtr($text,$tr);	
+	else : 
+	return $text;
+	endif;
 	}
 	
 }

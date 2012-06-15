@@ -3,15 +3,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Mesečni kineski horoskop primer</title>
-<style type="text/css">
-#horoskopius {font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:1.5}
-#horoskopius h2 {color: #39C; text-transform:uppercase}
-#horoskopius h3 {color: #C30}
-#horoskopius ul { list-style-type:none; margin:0; padding:0;}
-#horoskopius ul li { padding-bottom:10px; border-bottom:1px solid #ddd}
-#horoskopius ul li:last-child { border-bottom:none}
-.horoskopius-link { color: #666; font-size:90%;padding-top:20px;}
-</style>
+<!-- link ka horoskopius CSS fajlu -->
+<link rel="stylesheet" href="horoskopiuscss/horstyle.css" />
 
 </head>
 
@@ -24,6 +17,7 @@ $horoskopius->setPublicKey("ovde_ide_vas_public_key");
 $horoskopius->setHoroscope(2);
 $horoskopius->setHoroscopeType(3);
 $horoskopius->setResponseType("xml");
+$horoskopius->setAlphabet(1); //nova funkcija 1 = latinica, 2 = ćirilica
 $horoskopius->getResponse();
 ?>
 </body>

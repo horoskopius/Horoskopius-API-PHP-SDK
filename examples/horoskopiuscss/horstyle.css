@@ -1,0 +1,40 @@
+/* Horoskopius style
+-------------------------------------------------------------- */
+#horoskopius {font-family: Georgia, "Times New Roman", Times, serif; font-size:12px; line-height:1.5}
+#horoskopius h2 {color: #39C; text-transform:uppercase}
+#horoskopius h3 {color: #C30}
+#horoskopius ul { list-style-type:none; margin:0; padding:0;}
+#horoskopius ul li { padding-bottom:10px; border-bottom:1px solid #ddd}
+#horoskopius ul li:last-child { border-bottom:none}
+.horoskopius-link { color: #666; font-size:90%;padding-top:20px;}
+
+#horoskopius ul li:after {content:".";display:block;height:0;clear:both;visibility:hidden;}
+#horoskopius ul li {}
+
+#horoskopius ul li span.sign-container {background-image: url(horimg/signs.png); background-repeat:no-repeat; display:block; height:60px; width:65px; float: left; margin-right:10px; }
+.hor-ovan {}
+.hor-bik {  background-position:-65px top;}
+.hor-blizanci { background-position:-130px top;}
+.hor-rak {background-position:-195px top;}
+.hor-lav {background-position:-260px top;}
+.hor-devica {background-position:-325px top;}
+.hor-vaga {background-position:-390px top;}
+.hor-skorpija { background-position:-455px top;}
+.hor-strelac {  background-position:-520px top;}
+.hor-jarac {background-position:-585px top;}
+.hor-vodolija {background-position:-650px top;}
+.hor-ribe {  background-position:right top;}
+.hor-pacov {background-position:0 bottom;}
+.hor-bivo {  background-position:-65px bottom;}
+.hor-tigar { background-position:-130px bottom;}
+.hor-zec {background-position:-195px bottom;}
+.hor-zmaj {background-position:-260px bottom;}
+.hor-zmija {background-position:-325px bottom;}
+.hor-konj {background-position:-390px bottom;}
+.hor-koza { background-position:-455px bottom;}
+.hor-majmun {  background-position:-520px bottom;}
+.hor-petao {background-position:-585px bottom;}
+.hor-pas {background-position:-650px bottom;}
+.hor-svinja {  background-position:right bottom;}
+/* End Horoskopius style
+-------------------------------------------------------------- */
